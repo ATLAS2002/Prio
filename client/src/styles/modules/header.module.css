@@ -1,0 +1,5 @@
+.bg {
+    background: radial-gradient(ellipse, white, purple);
+    background-clip: text;
+    color: transparent;
+}
