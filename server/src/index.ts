@@ -1,27 +1,38 @@
-import { Elysia, ws } from 'elysia'
+import Elysia, { ws } from 'elysia'
+import cors from '@elysiajs/cors'
+import groupRoutes from '@routes/groups.routes'
+// import route from '@lib/plugin'
+import colors from 'colors.ts'
+
+colors.enable()
 
 const app = new Elysia()
+    // .use(route({ name: 'main', seed: { prefix: '/api' }}))
+    .use(cors({ origin: true }))
     .use(ws())
     .ws('/ws', {
-        message: (ws, message) => {
+        open: async (ws) => {
+            console.log('Websocket connection established'.blue)
+            ws.send('Websocket connection established')
+        },
+        message: async (ws, message) => {
             ws.send({
                 message,
                 time: Date.now()
             })
         },
-        open: (ws) => {
-            ws.send('Websocket connection established')
-        },
-        close: (ws) => {
-            ws.send('Connection closed')
+        close: async (ws) => {
+            console.log('Websocket connection closed'.yellow)
+            ws.close()
         }
     })
-    .get('/', () => 'home')
-    .get('/ping', () => 'pong1')
+    .use(groupRoutes)
     .listen(8000)
 
+export type Server = typeof app
+
 console.log(
-    `🦊 Elysia is running at ${
-        'http://' + app.server?.hostname + ':' + app.server?.port
-    }`
+    `Elysia `.colors('#CC3300').bold +
+    `🦊 is running at `.colors('#CC3300') +
+    `${'http://' + app.server?.hostname + ':' + app.server?.port}`.underline.colors('#CC3300').bold
 )
