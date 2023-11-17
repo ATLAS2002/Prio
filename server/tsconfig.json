@@ -106,5 +106,7 @@
       "@schemas/*": ["./src/schemas/*"],
       "@lib/*": ["./src/lib/*"]
     }
-  }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

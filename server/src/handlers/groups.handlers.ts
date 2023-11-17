@@ -1,4 +1,8 @@
-export const getAllGroups = async () => { }
+import db from "../lib/db"
+
+export const getAllGroups = async () => { 
+    db.connect();
+}
 
 export const getGroup = async (id: string) => new Response(id)
 
